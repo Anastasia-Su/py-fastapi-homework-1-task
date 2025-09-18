@@ -19,10 +19,10 @@ class MovieDetailResponseSchema(BaseModel):
     country: str
 
     model_config: ConfigDict = ConfigDict(from_attributes=True)
-    
+
     @field_validator("budget", "revenue", mode="before")
     def cast_to_int(cls, v):
-        return int(float(v)) 
+        return int(float(v))
 
 
 class MovieListResponseSchema(BaseModel):
@@ -31,5 +31,5 @@ class MovieListResponseSchema(BaseModel):
     next_page: Optional[str] = None
     total_pages: int
     total_items: int
-    
+
     model_config: ConfigDict = ConfigDict(from_attributes=True)
