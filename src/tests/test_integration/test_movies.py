@@ -171,6 +171,6 @@ async def test_get_movie_by_id_valid(client, db_session, seed_database):
     assert response_data["orig_title"] == expected_movie.orig_title
     assert response_data["status"] == expected_movie.status
     assert response_data["orig_lang"] == expected_movie.orig_lang
-    assert response_data["budget"] == float(expected_movie.budget)
-    assert response_data["revenue"] == expected_movie.revenue
+    assert response_data["budget"] == int(expected_movie.budget)
+    assert response_data["revenue"] == int(expected_movie.revenue)
     assert response_data["country"] == expected_movie.country

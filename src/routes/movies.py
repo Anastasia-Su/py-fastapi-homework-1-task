@@ -16,7 +16,10 @@ async def get_movies(
 ) -> dict:
     """Retrieve a paginated list of movies."""
 
-    total_items = (await db.execute(select(func.count(MovieModel.id)))).scalar()
+    total_items = await db.execute(
+        select(func.count()).select_from(MovieModel)
+    )
+    total_items = total_items.scalar_one()
 
     if total_items == 0:
         raise HTTPException(status_code=404, detail="No movies found.")
@@ -24,7 +27,12 @@ async def get_movies(
     total_pages = (total_items + per_page - 1) // per_page
     offset = (page - 1) * per_page
 
-    result = await db.execute(select(MovieModel).offset(offset).limit(per_page))
+    result = await db.execute(
+        select(MovieModel)
+        .order_by(MovieModel.id)
+        .offset(offset)
+        .limit(per_page)
+    )
     movies = result.scalars().all()
 
     if not movies:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, field_validator
 import datetime
 from typing import Optional
 
@@ -14,12 +14,15 @@ class MovieDetailResponseSchema(BaseModel):
     orig_title: str
     status: str
     orig_lang: str
-    budget: float
-    revenue: float
+    budget: int
+    revenue: int
     country: str
 
-    class ConfigDict:
-        from_attributes = True
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
+    
+    @field_validator("budget", "revenue", mode="before")
+    def cast_to_int(cls, v):
+        return int(float(v)) 
 
 
 class MovieListResponseSchema(BaseModel):
@@ -28,3 +31,5 @@ class MovieListResponseSchema(BaseModel):
     next_page: Optional[str] = None
     total_pages: int
     total_items: int
+    
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
