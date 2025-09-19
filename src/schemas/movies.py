@@ -22,7 +22,12 @@ class MovieDetailResponseSchema(BaseModel):
 
     @field_validator("budget", "revenue", mode="before")
     def cast_to_int(cls, v):
-        return int(float(v))
+        if v in (None, ""):
+            return 0
+        try:
+            return int(float(v))
+        except (TypeError, ValueError):
+            raise ValueError(f"Invalid value for budget/revenue: {v!r}")
 
 
 class MovieListResponseSchema(BaseModel):
